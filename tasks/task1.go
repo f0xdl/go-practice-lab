@@ -3,24 +3,22 @@ package tasks
 import "sync"
 
 /*
-	GoCounterCheck
+	CounterCheck
 
 Напиши функцию на Go, которая запускает N горутин.
 Каждая горутина увеличивает общий счётчик на 1, 1000 раз.
 Твоя задача — убедиться, что по завершению всех горутин значение счётчика равно N * 1000.
 
 Условия:
-
 # Использовать sync.WaitGroup для ожидания завершения
-
-Использовать sync.Mutex для защиты счётчика
+# Использовать sync.Mutex для защиты счётчика
 */
-func CounterCheck(N int) bool {
+func CounterCheck(workers int) bool {
 	counter := 0
 	mu := sync.Mutex{}
 	wg := sync.WaitGroup{}
-	wg.Add(N)
-	for i := 0; i < N; i++ {
+	wg.Add(workers)
+	for i := 0; i < workers; i++ {
 		go func() {
 			defer wg.Done()
 
@@ -33,7 +31,7 @@ func CounterCheck(N int) bool {
 	}
 	wg.Wait()
 	//fmt.Println("counter=", counter)
-	if N*1000 == counter {
+	if workers*1000 == counter {
 		return true
 	} else {
 		return false
